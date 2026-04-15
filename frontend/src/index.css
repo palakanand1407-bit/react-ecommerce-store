@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Design Tokens ─────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --ink:       #0f172a; 
+  --ink2:      #4a4a44;
+  --ink3:      #8a8a80;
+  --paper:     #f7f5f0;
+  --white:     #ffffff;
+  --accent:    #3b82f6;
+  --accent2:   #60a5fa;
+  --success:   #2d7a4f;
+  --danger:    #c0392b;
+  --border:    rgba(30, 30, 20, 0.12);
+  --border2:   rgba(30, 30, 20, 0.22);
+
+  /* Typography */
+  --ff-display: 'Playfair Display', Georgia, serif;
+  --ff-body:    'DM Sans', system-ui, sans-serif;
+
+  /* Spacing */
+  --radius:    4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* Shadows */
+  --shadow:    0 2px 16px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.13);
+
+  /* Transitions */
+  --transition: 200ms ease;
+}
+
+/* ── Base ──────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--ff-body);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--ff-body);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ── Layout Utilities ──────────────────────────────────────── */
+.page-wrapper {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.section-title {
+  font-family: var(--ff-display);
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ── Spinner ───────────────────────────────────────────────── */
+.spinner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  width: 100%;
+}
+
+.spinner-ring {
+  width: 38px;
+  height: 38px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Error Box ─────────────────────────────────────────────── */
+.error-box {
+  background: #fef0ef;
+  border: 1px solid #f5c6c3;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 2rem;
+  color: var(--danger);
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* ── Toast Notification ────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--ink);
+  color: white;
+  padding: 0.8rem 1.4rem;
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 9999;
+  box-shadow: var(--shadow-lg);
+  animation: toastIn 0.3s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Stars ─────────────────────────────────────────────────── */
+.stars { color: #d4943a; font-size: 0.9rem; }
+
+/* ── Badges / Pills ────────────────────────────────────────── */
+.pill {
+  display: inline-block;
+  padding: 0.22rem 0.7rem;
+  border: 1px solid var(--border2);
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--ink2);
+}
+
+/* ── Responsive helpers ─────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page-wrapper { padding: 2rem 1rem; }
+  .section-title { font-size: 1.4rem; }
+}

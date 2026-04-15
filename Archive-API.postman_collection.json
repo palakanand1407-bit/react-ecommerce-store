@@ -1,0 +1,251 @@
+{
+  "info": {
+    "name": "Veloria E-Commerce API",
+    "description": "Complete API test suite — Auth, Products, Orders, Payments",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api" },
+    { "key": "token",   "value": "" }
+  ],
+  "item": [
+    {
+      "name": "🔑 Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/auth/register",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"password123\"\n}" }
+          }
+        },
+        {
+          "name": "Login (User)",
+          "event": [{ "listen": "test", "script": { "exec": ["const r = pm.response.json();", "if(r.data && r.data.token) pm.collectionVariables.set('token', r.data.token);"] } }],
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"password123\"\n}" }
+          }
+        },
+        {
+          "name": "Login (Admin)",
+          "event": [{ "listen": "test", "script": { "exec": ["const r = pm.response.json();", "if(r.data && r.data.token) pm.collectionVariables.set('token', r.data.token);"] } }],
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}" }
+          }
+        },
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET", "url": "{{baseUrl}}/auth/me",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT", "url": "{{baseUrl}}/auth/profile",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" },{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Alice Updated\",\n  \"address\": {\n    \"street\": \"456 Oak Ave\",\n    \"city\": \"Los Angeles\",\n    \"zip\": \"90001\",\n    \"country\": \"US\"\n  }\n}" }
+          }
+        },
+        {
+          "name": "Upload Avatar (form-data)",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/auth/avatar",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": { "mode": "formdata", "formdata": [{ "key": "avatar", "type": "file", "src": "" }] }
+          }
+        },
+        {
+          "name": "Login — Wrong Password (expect 401)",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"wrongpassword\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📦 Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": { "method": "GET", "url": "{{baseUrl}}/products" }
+        },
+        {
+          "name": "Get Products — Filter by Category",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/products?category=Watches", "query": [{ "key": "category", "value": "Watches" }] } }
+        },
+        {
+          "name": "Get Products — Search",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/products?search=leather", "query": [{ "key": "search", "value": "leather" }] } }
+        },
+        {
+          "name": "Get Products — Sort by Price",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/products?sort=price_asc", "query": [{ "key": "sort", "value": "price_asc" }] } }
+        },
+        {
+          "name": "Get Single Product",
+          "request": { "method": "GET", "url": "{{baseUrl}}/products/p-1" }
+        },
+        {
+          "name": "Get Categories",
+          "request": { "method": "GET", "url": "{{baseUrl}}/products/categories" }
+        },
+        {
+          "name": "Create Product (Admin + Image)",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/products",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": { "mode": "formdata", "formdata": [
+              { "key": "name",        "value": "New Test Product", "type": "text" },
+              { "key": "description", "value": "A great product",  "type": "text" },
+              { "key": "price",       "value": "99.99",            "type": "text" },
+              { "key": "category",    "value": "Gadgets",          "type": "text" },
+              { "key": "stock",       "value": "50",               "type": "text" },
+              { "key": "image",       "type": "file",              "src": "" }
+            ]}
+          }
+        },
+        {
+          "name": "Delete Product (Admin)",
+          "request": {
+            "method": "DELETE", "url": "{{baseUrl}}/products/p-6",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Create Product — Non-Admin (expect 403)",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/products",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": { "mode": "formdata", "formdata": [{ "key": "name", "value": "Hack", "type": "text" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 Orders",
+      "item": [
+        {
+          "name": "Create Order (Card)",
+          "event": [{ "listen": "test", "script": { "exec": ["const r = pm.response.json();", "if(r.data && r.data.order) pm.collectionVariables.set('orderId', r.data.order.id);"] } }],
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/orders",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" },{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"items\": [\n    { \"productId\": \"p-1\", \"qty\": 1 },\n    { \"productId\": \"p-5\", \"qty\": 2 }\n  ],\n  \"paymentMethod\": \"card\",\n  \"shippingAddress\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"zip\": \"10001\",\n    \"country\": \"US\"\n  }\n}" }
+          }
+        },
+        {
+          "name": "Create Order (UPI)",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/orders",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" },{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"items\": [{ \"productId\": \"p-2\", \"qty\": 1 }],\n  \"paymentMethod\": \"upi\",\n  \"shippingAddress\": { \"street\": \"456 Park Ave\", \"city\": \"Mumbai\", \"zip\": \"400001\", \"country\": \"IN\" }\n}" }
+          }
+        },
+        {
+          "name": "Create Order (COD)",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/orders",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" },{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"items\": [{ \"productId\": \"p-3\", \"qty\": 1 }],\n  \"paymentMethod\": \"cod\",\n  \"shippingAddress\": { \"street\": \"789 Hill Rd\", \"city\": \"Delhi\", \"zip\": \"110001\", \"country\": \"IN\" }\n}" }
+          }
+        },
+        {
+          "name": "Get My Orders",
+          "request": {
+            "method": "GET", "url": "{{baseUrl}}/orders",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Get Single Order",
+          "request": {
+            "method": "GET", "url": "{{baseUrl}}/orders/{{orderId}}",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Get All Orders (Admin)",
+          "request": {
+            "method": "GET", "url": "{{baseUrl}}/orders/all",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Update Order Status (Admin)",
+          "request": {
+            "method": "PUT", "url": "{{baseUrl}}/orders/{{orderId}}/status",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" },{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{ \"status\": \"shipped\" }" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💳 Payments",
+      "item": [
+        {
+          "name": "Get Payment Methods (Public)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/payments/methods" }
+        },
+        {
+          "name": "Process — Card (Success)",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/payments/process",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" },{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"method\": \"card\",\n  \"amount\": 399.99,\n  \"cardDetails\": {\n    \"number\": \"4111111111111111\",\n    \"expiry\": \"12/27\",\n    \"cvv\": \"123\",\n    \"nameOnCard\": \"Alice Demo\"\n  }\n}" }
+          }
+        },
+        {
+          "name": "Process — Card (Declined)",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/payments/process",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" },{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"method\": \"card\",\n  \"amount\": 399.99,\n  \"cardDetails\": {\n    \"number\": \"4000000000000002\",\n    \"expiry\": \"12/27\",\n    \"cvv\": \"123\",\n    \"nameOnCard\": \"Test Decline\"\n  }\n}" }
+          }
+        },
+        {
+          "name": "Process — UPI (Success)",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/payments/process",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" },{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"method\": \"upi\",\n  \"amount\": 399.99,\n  \"upiId\": \"alice@gpay\"\n}" }
+          }
+        },
+        {
+          "name": "Process — UPI (Fail)",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/payments/process",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" },{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"method\": \"upi\",\n  \"amount\": 399.99,\n  \"upiId\": \"fail@upi\"\n}" }
+          }
+        },
+        {
+          "name": "Process — COD",
+          "request": {
+            "method": "POST", "url": "{{baseUrl}}/payments/process",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" },{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"method\": \"cod\",\n  \"amount\": 399.99\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛡️ Edge Cases",
+      "item": [
+        { "name": "No Token (expect 401)",   "request": { "method": "GET", "url": "{{baseUrl}}/auth/me" } },
+        { "name": "Invalid Token (expect 401)", "request": { "method": "GET", "url": "{{baseUrl}}/auth/me", "header": [{ "key": "Authorization", "value": "Bearer invalid.token.here" }] } },
+        { "name": "Health Check",            "request": { "method": "GET", "url": "http://localhost:5000/api/health" } },
+        { "name": "404 Route",               "request": { "method": "GET", "url": "http://localhost:5000/api/nonexistent" } }
+      ]
+    }
+  ]
+}

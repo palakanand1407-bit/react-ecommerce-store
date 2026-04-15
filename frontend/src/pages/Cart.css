@@ -1,0 +1,44 @@
+/* Cart.css */
+.cart-empty { text-align:center; padding:6rem 2rem; }
+.cart-empty__icon { font-size:4rem; margin-bottom:1.25rem; }
+.cart-empty__title { font-family:var(--ff-display); font-size:1.6rem; font-weight:500; margin-bottom:.5rem; color:var(--ink); }
+.cart-empty__sub { color:var(--ink3); font-size:.92rem; margin-bottom:2rem; }
+.shop-btn { display:inline-block; padding:.75rem 2rem; background:var(--ink); color:white; border-radius:var(--radius); font-size:.9rem; font-weight:500; transition:background var(--transition); }
+.shop-btn:hover { background:var(--accent); }
+
+.cart-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:2rem; flex-wrap:wrap; gap:.75rem; }
+.cart-count { font-family:var(--ff-body); font-size:.85rem; font-weight:400; color:var(--ink3); margin-left:.75rem; }
+.clear-btn { background:none; border:1px solid var(--border2); border-radius:var(--radius); padding:.4rem 1rem; font-size:.8rem; color:var(--ink3); transition:var(--transition); }
+.clear-btn:hover { color:var(--danger); border-color:var(--danger); }
+
+.cart-layout { display:grid; grid-template-columns:1fr 340px; gap:2.5rem; align-items:start; }
+@media(max-width:860px){ .cart-layout{ grid-template-columns:1fr; } }
+
+.cart-cols-header { display:grid; grid-template-columns:1fr auto auto; gap:1rem; padding:0 0 .75rem; border-bottom:1px solid var(--border); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink3); font-weight:500; }
+
+.cart-item { display:grid; grid-template-columns:80px 1fr auto auto; gap:1rem; align-items:center; padding:1.25rem 0; border-bottom:1px solid var(--border); }
+@media(max-width:580px){ .cart-item{ grid-template-columns:64px 1fr; grid-template-rows:auto auto; } .cart-item__controls,.cart-item__line-total{ grid-column:2; } }
+
+.cart-item__img-wrap { width:80px; height:80px; background:var(--paper); border:1px solid var(--border); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; padding:.5rem; overflow:hidden; flex-shrink:0; }
+.cart-item__img { width:100%; height:100%; object-fit:contain; }
+.cart-item__details { display:flex; flex-direction:column; gap:.2rem; min-width:0; }
+.cart-item__name { font-family:var(--ff-display); font-size:.92rem; font-weight:500; color:var(--ink); line-height:1.35; transition:color var(--transition); }
+.cart-item__name:hover { color:var(--accent); }
+.cart-item__category { font-size:.72rem; color:var(--accent); font-weight:500; text-transform:uppercase; letter-spacing:.07em; }
+.cart-item__unit-price { font-size:.78rem; color:var(--ink3); }
+.cart-item__controls { display:flex; flex-direction:column; align-items:center; gap:.5rem; }
+.cart-item__remove { background:none; border:none; font-size:.75rem; color:var(--ink3); transition:color var(--transition); padding:0; font-family:var(--ff-body); }
+.cart-item__remove:hover { color:var(--danger); }
+.cart-item__line-total { font-size:.95rem; font-weight:500; text-align:right; min-width:80px; color:var(--ink); }
+
+.order-summary { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-xl); padding:1.6rem; position:sticky; top:80px; }
+.order-summary__title { font-family:var(--ff-display); font-size:1.1rem; font-weight:500; margin-bottom:1.25rem; color:var(--ink); }
+.summary-row { display:flex; justify-content:space-between; font-size:.875rem; color:var(--ink2); margin-bottom:.6rem; }
+.summary-free { color:var(--success); font-weight:500; }
+.summary-ship-note { font-size:.75rem; color:var(--ink3); margin-bottom:.5rem; }
+.summary-divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
+.summary-total { display:flex; justify-content:space-between; font-weight:500; font-size:1.05rem; margin-bottom:1.25rem; color:var(--ink); }
+.checkout-btn { width:100%; padding:.9rem; background:var(--accent); color:white; border:none; border-radius:var(--radius); font-size:.95rem; font-weight:500; transition:background var(--transition); margin-bottom:.75rem; }
+.checkout-btn:hover { background:var(--accent2); }
+.continue-link { display:block; text-align:center; font-size:.83rem; color:var(--ink3); transition:color var(--transition); }
+.continue-link:hover { color:var(--ink); }
